@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class ViewController: UIViewController {
+final class ViewController: UIViewController, UITextFieldDelegate {
     
     @IBOutlet weak var mainView: UIView!
     
@@ -60,8 +60,13 @@ final class ViewController: UIViewController {
         showSuccesfulAlert(with: "Поздравляем!", and: "У вас всё получилось :)")
     }
     
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+            submitButtonPressed()
+            return true
+        }
+    
  
-//Mark: - PrivateMethods
+//MARK: - PrivateMethods
     private func changeViewColor() {
         mainView.backgroundColor = UIColor(red: CGFloat(redSlider.value),
                                            green: CGFloat(greenSlider.value),
@@ -114,10 +119,20 @@ final class ViewController: UIViewController {
     }
 }
 
+extension ViewController: UITextViewDelegate {
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesBegan(touches, with: event)
+        view.endEditing(true)
+    }
+}
+
 //MARK: - UIAlertController
 extension ViewController {
     private func showIssueAlert(with title: String, and message: String) {
-        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let alert = UIAlertController(title: title, 
+                                      message: message,
+                                      preferredStyle: .alert)
+        
         let okAction = UIAlertAction(title: "OK", style: .default) { _ in
             self.mainTextField.text = ""}
         alert.addAction(okAction)
@@ -126,7 +141,10 @@ extension ViewController {
     }
     
     private func showSuccesfulAlert(with title: String, and message: String) {
-        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let alert = UIAlertController(title: title, 
+                                      message: message,
+                                      preferredStyle: .alert)
+        
         let repeatAction = UIAlertAction(title: "Повторить", style: .default) { _ in
             self.redSlider.value = 0.50
             self.greenSlider.value = 0.50
